@@ -4,12 +4,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { genresMock } from "../../mocks/genres";
 import { Button, Select } from "../../components/atoms";
 import { usePreferredGenresStore } from "../../store/preferredGenres.store";
+import { LayoutContainer } from "../../shared";
+import { useNavigation } from "@react-navigation/native";
+import { Navigation } from "lucide-react-native";
+import { resources } from "../../utils/resources";
 
 export function RegisterPreferencesScreen() {
   const { setGenreId, genresId } = usePreferredGenresStore((state) => state);
+  const navigator = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <LayoutContainer>
       <SafeAreaView>
         <View style={styles.header}>
           <Text style={styles.title}>Selecione seus Generos Favoritos</Text>
@@ -28,9 +33,14 @@ export function RegisterPreferencesScreen() {
           )}
         />
         <View style={styles.footer}>
-          <Button title="Continuar" disabled={!genresId.length} />
+          <Button
+            title="Continuar"
+            disabled={!genresId.length}
+            onPress={() => navigator.navigate("tabs")}
+            rightIcon={<Navigation color={resources.colors.white} size={18} />}
+          />
         </View>
       </SafeAreaView>
-    </View>
+    </LayoutContainer>
   );
 }

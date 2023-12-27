@@ -16,7 +16,7 @@ export function Button(props: Props) {
     title,
     leftIcon,
     rightIcon,
-    bg = resources.colors.blue,
+    bg = resources.colors.violet500,
     ...rest
   } = props;
 

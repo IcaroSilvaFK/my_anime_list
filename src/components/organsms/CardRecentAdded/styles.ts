@@ -3,18 +3,17 @@ import { resources } from '../../../utils/resources'
 
 export const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    width: '100%',
-    gap: 6
+    alignItems: "center",
+    gap: 6,
+  },
+  image: {
+    width: 45,
+    height: 45,
+    borderRadius: 50,
   },
   text: {
     color: resources.colors.white,
     fontFamily: resources.fonts.Poppins_400Regular,
-    fontSize: 18
+    fontSize: 16
   }
 })
