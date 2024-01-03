@@ -3,19 +3,25 @@ import { darken } from "polished";
 
 import { styles } from "./styles";
 import { resources } from "../../../utils/resources";
+import { ElementType } from "react";
 
 type Props = {
-  leftIcon?: JSX.Element;
-  rightIcon?: JSX.Element;
+  leftIcon?: ElementType;
+  rightIcon?: ElementType;
   title: string;
   bg?: string;
 } & TouchableOpacityProps;
 
+const buttonIconProps = {
+  size: 22,
+  color: resources.colors.white,
+};
+
 export function Button(props: Props) {
   const {
     title,
-    leftIcon,
-    rightIcon,
+    leftIcon: LeftIcon,
+    rightIcon: RightIcon,
     bg = resources.colors.violet500,
     ...rest
   } = props;
@@ -30,9 +36,9 @@ export function Button(props: Props) {
       ]}
       {...rest}
     >
-      {leftIcon && leftIcon}
+      {LeftIcon && <LeftIcon {...buttonIconProps} />}
       <Text style={styles.text}>{title}</Text>
-      {rightIcon && rightIcon}
+      {/* {RightIcon && <RightIcon {...buttonIconProps} />} */}
     </TouchableOpacity>
   );
 }

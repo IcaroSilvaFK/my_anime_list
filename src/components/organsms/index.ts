@@ -1,1 +1,2 @@
-export * from './CardRecentAdded'
+export * from './AvatarWithUserName'
+export * from './HeaderWithConfig'

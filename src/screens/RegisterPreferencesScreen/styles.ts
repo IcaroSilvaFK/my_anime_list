@@ -3,10 +3,14 @@ import { resources } from '../../utils/resources'
 
 
 export const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   header: {
-    height: 80,
-    alignItems: "flex-end",
-    justifyContent: "flex-end"
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12
   },
   title: {
     fontSize: 20,
@@ -16,10 +20,11 @@ export const styles = StyleSheet.create({
     lineHeight: 30,
     color: resources.colors.white,
   },
-  flatList: {
-    marginTop: 20,
-    flex: 1,
-    padding: 12,
+  content: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    width: '100%',
+    gap: 22
   },
   footer: {
     padding: 12

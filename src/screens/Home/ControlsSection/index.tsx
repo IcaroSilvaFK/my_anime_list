@@ -4,33 +4,28 @@ import {
   Presentation,
   Star,
 } from "lucide-react-native";
-import { Text, TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
 
 import { styles } from "./styles";
-import { resources } from "../../../utils/resources";
+import { ControlCard } from "../../../components/atoms";
+import { useNavigation } from "@react-navigation/native";
 
 export function ControlSection() {
+  const navigator = useNavigation();
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <TouchableOpacity style={styles.button}>
-          <LayoutDashboard size={26} color={resources.colors.white} />
-          <Text style={styles.text}>Generos</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Presentation size={26} color={resources.colors.white} />
-          <Text style={styles.text}>Sesson</Text>
-        </TouchableOpacity>
+        <ControlCard
+          icon={LayoutDashboard}
+          text="Generos"
+          onPress={() => navigator.navigate("genres")}
+        />
+        <ControlCard icon={Presentation} text="Sesson" />
       </View>
       <View style={styles.row}>
-        <TouchableOpacity style={styles.button}>
-          <Star size={26} color={resources.colors.white} />
-          <Text style={styles.text}>Top animes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <MessageCircleCode size={26} color={resources.colors.white} />
-          <Text style={styles.text}>Reviews</Text>
-        </TouchableOpacity>
+        <ControlCard icon={Star} text="Top animes" />
+        <ControlCard icon={MessageCircleCode} text="Reviews" />
       </View>
     </View>
   );

@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
   text: {
     color: resources.colors.white,
     fontFamily: resources.fonts.Poppins_400Regular,
-    fontSize: 16
+    fontSize: 16,
+    maxWidth: 120
   }
 })

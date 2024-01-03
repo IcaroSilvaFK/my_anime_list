@@ -11,7 +11,8 @@ export const resources = {
     gray400: '#A0AEC0',
     gray500: '#718096',
     gray600: '#4A5568',
-    violet500: '#9260ff'
+    violet500: '#9260ff',
+    yellow: '#FFD233'
   },
   fonts: {
     DMSans_400Regular: 'DMSans_400Regular',
