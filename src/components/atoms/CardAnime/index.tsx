@@ -6,10 +6,13 @@ import { resources } from "../../../utils/resources";
 
 type Props = {
   onPress?: () => void;
+  image?: string;
+  title: string;
+  rating: number;
 };
 
 export function CardAnime(props: Props) {
-  const { onPress } = props;
+  const { onPress, title, image, rating } = props;
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -17,7 +20,7 @@ export function CardAnime(props: Props) {
         <View style={styles.absolute}>
           <Image
             source={{
-              uri: "https://cdn.nekosapi.com/images/original/7d0a2260-9a84-4bfb-bb11-f26ed2722dc7.webp",
+              uri: image,
             }}
             style={styles.image}
           />
@@ -27,13 +30,13 @@ export function CardAnime(props: Props) {
               color={resources.colors.yellow}
               fill={resources.colors.yellow}
             />
-            <Text style={styles.ratingText}>22</Text>
+            <Text style={styles.ratingText}>{rating}</Text>
           </View>
         </View>
       </View>
       <View style={styles.body}>
         <Text style={styles.title} numberOfLines={1}>
-          Anime 1 cascascascas
+          {title}
         </Text>
         <BadgeInfo size={22} color={resources.colors.white} />
       </View>

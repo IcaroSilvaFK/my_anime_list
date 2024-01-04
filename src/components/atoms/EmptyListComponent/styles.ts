@@ -17,6 +17,8 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     color: darken(0.1, resources.colors.white),
-    fontFamily: resources.fonts.Poppins_400Regular
+    fontFamily: resources.fonts.Poppins_400Regular,
+    maxWidth: 280,
+    textAlign: 'center'
   }
 })

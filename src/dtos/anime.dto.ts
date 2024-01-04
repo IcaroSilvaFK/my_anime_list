@@ -15,5 +15,6 @@ export type AnimeDTO = {
   }
   genres: GenreDTO[]
   synopsis?: string
+  score?: number
 }
 

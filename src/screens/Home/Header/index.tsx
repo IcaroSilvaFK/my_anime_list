@@ -7,11 +7,14 @@ import { availableReleaseDates } from "../../../utils/availableReleaseDates";
 import { useEffect, useState } from "react";
 import { AnimeDTO } from "../../../dtos/anime.dto";
 import { Loading } from "./Loading";
+import { useNavigation } from "@react-navigation/native";
 
 export function Header() {
   const [animes, setAnimes] = useState<AnimeDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  const navigator = useNavigation();
 
   useEffect(() => {
     requestLatestAnimes();
@@ -60,6 +63,7 @@ export function Header() {
           horizontal
           contentContainerStyle={{
             paddingHorizontal: 22,
+            paddingVertical: 12,
           }}
           data={animes}
           ItemSeparatorComponent={() => <View style={{ width: 18 }} />}
@@ -67,6 +71,11 @@ export function Header() {
             <CardRecentAdded
               image={item.images.jpg?.image_url}
               title={item.title}
+              onPress={() =>
+                navigator.navigate("viewDetails", {
+                  animeId: item.mal_id,
+                })
+              }
             />
           )}
         />

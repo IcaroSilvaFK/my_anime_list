@@ -1,22 +1,27 @@
-import { FlatList, ScrollView, Text, View } from "react-native";
+import { useCallback } from "react";
+import { ScrollView, Text, View } from "react-native";
 import { styles } from "./styles";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { genresMock } from "../../mocks/genres";
-import { Button, Select } from "../../components/atoms";
+import { Button } from "../../components/atoms";
 import { usePreferredGenresStore } from "../../store/preferredGenres.store";
 import { LayoutContainer } from "../../shared";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Navigation } from "lucide-react-native";
-import { resources } from "../../utils/resources";
 import { CardSelect } from "../../components/atoms";
 
 export function RegisterPreferencesScreen() {
   const { setGenreId, genresId } = usePreferredGenresStore((state) => state);
   const navigator = useNavigation();
   const { top } = useSafeAreaInsets();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (genresId.length > 0) {
+        navigator.navigate("tabs");
+      }
+    }, [genresId])
+  );
 
   return (
     <LayoutContainer>

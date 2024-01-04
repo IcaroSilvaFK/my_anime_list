@@ -14,7 +14,7 @@ export function ProgressBar(props: Props) {
     <View style={styles.container}>
       <View
         style={{
-          width: `${progress}%`,
+          width: progress,
           backgroundColor: resources.colors.violet500,
           flex: 1,
         }}

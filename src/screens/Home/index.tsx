@@ -14,12 +14,47 @@ import { ControlSection } from "./ControlsSection";
 import { styles } from "./styles";
 import { PlusCircle, Search } from "lucide-react-native";
 import { resources } from "../../utils/resources";
-import { CardAnime } from "../../components/atoms";
+import { CardAnime, EmptyListComponent } from "../../components/atoms";
 import { HeaderWithConfig } from "../../components/organsms";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useCallback, useState } from "react";
+import { usePreferredGenresStore } from "../../store/preferredGenres.store";
+import { jikanApi } from "../../services/http.service";
+import { AnimeDTO } from "../../dtos/anime.dto";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFavoriteAnimes } from "../../store/favoritesAnimes.store";
 
 export function Home() {
   const { top } = useSafeAreaInsets();
+
+  const navigator = useNavigation();
+
+  const { genresId } = usePreferredGenresStore((state) => state);
+  const [recommendedAnimes, setRecommendedAnimes] = useState<AnimeDTO[]>([]);
+
+  const { favoritesAnime } = useFavoriteAnimes((state) => state);
+
+  useFocusEffect(
+    useCallback(() => {
+      requestRecommendationsAnimes();
+    }, [])
+  );
+
+  const requestRecommendationsAnimes = useCallback(async () => {
+    try {
+      const genresFromQuery = genresId.join(",");
+
+      const query = `?genres=${genresFromQuery}`;
+
+      const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(
+        `/anime${query}`
+      );
+
+      setRecommendedAnimes(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   return (
     <LayoutContainer>
@@ -44,9 +79,26 @@ export function Home() {
             </View>
             <View style={{ marginTop: 22 }}>
               <FlatList
-                data={[1, 2, 3, 4, 5]}
+                data={recommendedAnimes}
+                contentContainerStyle={{
+                  flex: 1,
+                }}
                 ItemSeparatorComponent={() => <View style={{ width: 28 }} />}
-                renderItem={() => <CardAnime />}
+                ListEmptyComponent={() => (
+                  <EmptyListComponent text="Oops parece que não temos recomendações para você!" />
+                )}
+                renderItem={({ item }) => (
+                  <CardAnime
+                    rating={item?.score || 0}
+                    title={item.title}
+                    image={item?.images?.jpg?.image_url}
+                    onPress={() => {
+                      navigator.navigate("viewDetails", {
+                        animeId: item.mal_id,
+                      });
+                    }}
+                  />
+                )}
                 horizontal
                 showsHorizontalScrollIndicator={false}
               />
@@ -62,9 +114,26 @@ export function Home() {
             </View>
             <View style={{ marginTop: 22 }}>
               <FlatList
-                data={[1, 2, 3, 4, 5]}
+                data={favoritesAnime}
                 ItemSeparatorComponent={() => <View style={{ width: 28 }} />}
-                renderItem={() => <CardAnime />}
+                contentContainerStyle={{
+                  flex: favoritesAnime.length > 0 ? 0 : 1,
+                }}
+                ListEmptyComponent={() => (
+                  <EmptyListComponent text="Oops parece que não temos animes favoritados. Adicione alguns!" />
+                )}
+                renderItem={({ item }) => (
+                  <CardAnime
+                    rating={item?.score || 0}
+                    title={item.title}
+                    image={item?.images?.jpg?.image_url}
+                    onPress={() => {
+                      navigator.navigate("viewDetails", {
+                        animeId: item.mal_id,
+                      });
+                    }}
+                  />
+                )}
                 horizontal
                 showsHorizontalScrollIndicator={false}
               />
@@ -75,3 +144,5 @@ export function Home() {
     </LayoutContainer>
   );
 }
+
+//icone para pagina de meus favoritos <BookHeart />

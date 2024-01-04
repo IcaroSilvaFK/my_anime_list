@@ -11,7 +11,8 @@ export const styles = StyleSheet.create({
     gap: 12,
     borderRadius: 8,
     backgroundColor: transparentize(0.9, resources.colors.white),
-    elevation: 9
+    elevation: 9,
+    maxWidth: 350
   },
   image: {
     width: 64,
@@ -21,7 +22,8 @@ export const styles = StyleSheet.create({
   text: {
     color: resources.colors.white,
     fontFamily: resources.fonts.Poppins_400Regular,
-    fontSize: 16
+    fontSize: 16,
+    width: 250,
   },
   containerRating: {
     flexDirection: 'row',

@@ -4,13 +4,14 @@ import { styles } from "./styles";
 type Props = {
   image: string;
   title: string;
+  onPress?: () => void;
 };
 
 export function CardRecentAdded(props: Props) {
-  const { image, title } = props;
+  const { image, title, onPress } = props;
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <Image
         source={{
           uri: image,

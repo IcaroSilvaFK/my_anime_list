@@ -28,6 +28,8 @@ export function BottomTabsNavigation() {
           elevation: 4,
         },
       }}
+      backBehavior="history"
+      detachInactiveScreens
     >
       <Screen
         name="Home"
@@ -62,7 +64,7 @@ export function BottomTabsNavigation() {
               route="listAnimes"
             />
           ),
-          unmountOnBlur: true,
+          // unmountOnBlur: true,
         }}
       />
       <Screen

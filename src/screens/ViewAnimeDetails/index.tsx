@@ -5,10 +5,13 @@ import {
   Text,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from "react-native";
-import { ArrowLeftCircle, PlusCircle } from "lucide-react-native";
-import { useNavigation } from "@react-navigation/native";
+import { ArrowLeftCircle, PlusCircle, Trash2 } from "lucide-react-native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { resources } from "../../utils/resources";
@@ -18,23 +21,64 @@ import { formatDate } from "../../utils/formatDate";
 
 import { styles } from "./styles";
 import { EmptyListComponent } from "../../components/atoms/EmptyListComponent";
+import { useCallback, useState } from "react";
+import { jikanApi } from "../../services/http.service";
+import { AnimeDTO } from "../../dtos/anime.dto";
+import { EpisodeDTO } from "../../dtos/episode.dto";
+import { useFavoriteAnimes } from "../../store/favoritesAnimes.store";
 
 export function ViewAnimeDetails() {
   const { top } = useSafeAreaInsets();
   const navigator = useNavigation();
+  const { params } = useRoute();
+
+  const [animeDetails, setAnimeDetails] = useState<AnimeDTO>({} as AnimeDTO);
+  const [episodes, setEpisodes] = useState<EpisodeDTO[]>([]);
+
+  const { addFavorite, favoritesAnime, removeFavorite } = useFavoriteAnimes(
+    (state) => state
+  );
+
+  const animeExistsInFavorites =
+    favoritesAnime.filter((anime) => anime?.mal_id === animeDetails?.mal_id)
+      .length > 0;
+
+  const { animeId } = params as {
+    animeId: number;
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      handleRequestAnimeDetails();
+      handleRequestAnimeEpisodes();
+    }, [])
+  );
+
+  const handleRequestAnimeDetails = useCallback(async () => {
+    const { data } = await jikanApi.get<{ data: AnimeDTO }>(
+      `/anime/${animeId}`
+    );
+    console.log({ data });
+    setAnimeDetails(data);
+  }, []);
+
+  const handleRequestAnimeEpisodes = useCallback(async () => {
+    const { data } = await jikanApi.get<{ data: EpisodeDTO[] }>(
+      `/anime/${animeId}/episodes`
+    );
+    setEpisodes(data);
+  }, []);
 
   return (
     <LayoutContainer>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={[styles.header, { marginTop: top }]}>
             <TouchableOpacity onPress={() => navigator.goBack()}>
               <ArrowLeftCircle size={32} color={resources.colors.white} />
             </TouchableOpacity>
             <Text numberOfLines={1} style={styles.title}>
-              Anime teste Lorem ipsum dolor sit amet, consectetur adipisicing
-              elit. Odio inventore laboriosam voluptatem labore exercitationem,
-              esse perspiciatis. Harum et beatae, ab sed,
+              {animeDetails?.title}
             </Text>
           </View>
 
@@ -42,7 +86,7 @@ export function ViewAnimeDetails() {
             <View>
               <Image
                 source={{
-                  uri: "https://cdn.nekosapi.com/images/original/7d0a2260-9a84-4bfb-bb11-f26ed2722dc7.webp",
+                  uri: animeDetails.images?.jpg?.image_url,
                 }}
                 style={styles.imageCover}
               />
@@ -50,45 +94,68 @@ export function ViewAnimeDetails() {
             <View style={styles.containerDetails}>
               <View style={styles.contentCover}>
                 <Text style={styles.label}>Genre</Text>
-                <Chip>Comedy</Chip>
-                <Chip>Comedy</Chip>
+                {animeDetails?.genres?.map((genre) => (
+                  <Chip key={genre?.mal_id}>{genre?.name}</Chip>
+                ))}
               </View>
               <View style={styles.contentCover}>
                 <Text style={styles.label}>Rating</Text>
-                <ProgressBar progress={12} />
+                <ProgressBar progress={animeDetails.score || 0} />
               </View>
               <View style={styles.contentCover}>
                 <Text style={styles.label}>Lançamento</Text>
-                <Text style={styles.date}>{formatDate(new Date())}</Text>
+                <Text style={styles.date}>
+                  {animeDetails?.aired?.from &&
+                    formatDate(new Date(animeDetails?.aired?.from))}
+                </Text>
               </View>
             </View>
           </View>
           <View style={styles.animeSynopsis}>
             <Text style={styles.label}>Synopsis</Text>
-            <Text style={styles.description}>
-              un Shirasaki and the Jinguuji sisters are childhood friends and
-              neighbors. When Jun's first girlfriend, the older sister Ryuumi,
-              breaks up with him, she says something that complicates the three
-              people's relationship, their first loves, and their
-              romance—?\n\n(Source: MAL News)
-            </Text>
+            <Text style={styles.description}>{animeDetails?.synopsis}</Text>
           </View>
           <View style={styles.containerEpisodes}>
             <View style={styles.headerEpisodes}>
               <Text style={styles.label}>Episódios</Text>
             </View>
             <FlatList
-              data={[]}
+              data={episodes}
+              horizontal
               showsHorizontalScrollIndicator={false}
               ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
               ListEmptyComponent={() => <EmptyListComponent />}
-              horizontal
-              contentContainerStyle={{ paddingHorizontal: 12, flex: 1 }}
-              renderItem={() => <CardEpisode />}
+              contentContainerStyle={{
+                paddingRight: 22,
+                paddingLeft: 12,
+                flex: episodes.length > 0 ? undefined : 1,
+              }}
+              renderItem={({ item }) => (
+                <CardEpisode
+                  animeImage={animeDetails.images?.jpg?.image_url}
+                  title={item?.title}
+                  score={item?.score}
+                />
+              )}
+              keyExtractor={({ mal_id }) => String(mal_id)}
             />
           </View>
           <View style={styles.footer}>
-            <Button title="Adicionar a meus favoritos" leftIcon={PlusCircle} />
+            {!animeExistsInFavorites && (
+              <Button
+                title="Adicionar a meus favoritos"
+                leftIcon={PlusCircle}
+                onPress={() => addFavorite(animeDetails)}
+              />
+            )}
+            {animeExistsInFavorites && (
+              <Button
+                title="Remover dos favoritos"
+                leftIcon={Trash2}
+                onPress={() => removeFavorite(animeDetails?.mal_id)}
+                bg={resources.colors.red}
+              />
+            )}
           </View>
         </View>
       </ScrollView>
