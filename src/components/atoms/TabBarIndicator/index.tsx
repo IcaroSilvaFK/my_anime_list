@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 type Props = {
   icon: JSX.Element;
   title: string;
-  route: "register_preferences" | "tabs" | "genres" | "listAnimes";
+  route: "register_preferences" | "tabs" | "genres" | "listAnimes" | "home";
 };
 
 export function TabBarIndicator(props: Props) {

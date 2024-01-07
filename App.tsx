@@ -10,6 +10,7 @@ import {
 } from "@expo-google-fonts/poppins";
 import { useCallback } from "react";
 import { ApplicationRoutes } from "./src/routes";
+import ToastManager from "toastify-react-native";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,6 +37,7 @@ export default function App() {
     <View style={styles.container} onLayout={onLayoutRootView}>
       <ApplicationRoutes />
       <StatusBar style="light" translucent backgroundColor="transparent" />
+      <ToastManager />
     </View>
   );
 }

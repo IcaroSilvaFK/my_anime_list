@@ -12,7 +12,7 @@ import { Header } from "./Header";
 import { ControlSection } from "./ControlsSection";
 
 import { styles } from "./styles";
-import { PlusCircle, Search } from "lucide-react-native";
+import { BookHeart, PlusCircle, Search, Star } from "lucide-react-native";
 import { resources } from "../../utils/resources";
 import { CardAnime, EmptyListComponent } from "../../components/atoms";
 import { HeaderWithConfig } from "../../components/organsms";
@@ -71,7 +71,10 @@ export function Home() {
           </View>
           <View style={styles.animesSecionContainer}>
             <View style={styles.headerAnimesSection}>
-              <Text style={styles.headerTitle}>Recomendados</Text>
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Recomendados</Text>
+                <BookHeart color={resources.colors.white} />
+              </View>
               <TouchableOpacity style={styles.headerButton}>
                 <Text style={styles.headerButtonText}>Ver mais</Text>
                 <PlusCircle color={resources.colors.violet500} />
@@ -106,7 +109,10 @@ export function Home() {
           </View>
           <View style={[styles.animesSecionContainer, { marginTop: 22 }]}>
             <View style={styles.headerAnimesSection}>
-              <Text style={styles.headerTitle}>Meus Favoritos</Text>
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Meus Favoritos</Text>
+                <Star color={resources.colors.white} />
+              </View>
               <TouchableOpacity style={styles.headerButton}>
                 <Text style={styles.headerButtonText}>Ver mais</Text>
                 <PlusCircle color={resources.colors.violet500} />

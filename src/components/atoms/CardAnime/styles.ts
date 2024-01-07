@@ -34,7 +34,8 @@ export const styles = StyleSheet.create({
     backgroundColor: resources.colors.violet500,
     padding: 4,
     borderBottomLeftRadius: 4,
-    borderBottomRightRadius: 4
+    borderBottomRightRadius: 4,
+    alignItems: 'center'
   },
   ratingText: {
     fontSize: 14,

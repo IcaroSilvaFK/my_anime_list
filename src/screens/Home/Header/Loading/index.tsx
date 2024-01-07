@@ -1,12 +1,12 @@
 import { View } from "lucide-react-native";
-import { ShimmerPlaceholder } from "../../../../utils/shimmer";
 
 import { styles } from "./styles";
+import { BaseShimmer } from "../../../../components/atoms";
 
 export function Loading() {
   return (
     <View style={styles.container}>
-      <ShimmerPlaceholder
+      <BaseShimmer
         width={45}
         height={45}
         shimmerStyle={{ borderRadius: 50 }}
@@ -24,7 +24,7 @@ export function Loading() {
         }}
       />
 
-      <ShimmerPlaceholder width={120} height={18} stopAutoRun />
+      <BaseShimmer width={120} height={18} stopAutoRun />
     </View>
   );
 }

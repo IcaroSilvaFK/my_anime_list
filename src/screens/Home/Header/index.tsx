@@ -1,6 +1,6 @@
 import { FlatList, Text, View } from "react-native";
 import { styles } from "./styles";
-import { CardRecentAdded } from "../../../components/atoms";
+import { CardRecentAdded, EmptyListComponent } from "../../../components/atoms";
 import { jikanApi } from "../../../services/http.service";
 import { getCurrentDayInLongString } from "../../../utils/getCurrentDayInLongString";
 import { availableReleaseDates } from "../../../utils/availableReleaseDates";
@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { AnimeDTO } from "../../../dtos/anime.dto";
 import { Loading } from "./Loading";
 import { useNavigation } from "@react-navigation/native";
+import { CalendarPlus, HeartCrack } from "lucide-react-native";
+import { resources } from "../../../utils/resources";
 
 export function Header() {
   const [animes, setAnimes] = useState<AnimeDTO[]>([]);
@@ -45,7 +47,10 @@ export function Header() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.text}>Adicionados Recentemente</Text>
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.text}>Adicionados Recentemente</Text>
+          <CalendarPlus color={resources.colors.white} />
+        </View>
       </View>
       {isLoading && (
         <FlatList
@@ -64,6 +69,7 @@ export function Header() {
           contentContainerStyle={{
             paddingHorizontal: 22,
             paddingVertical: 12,
+            flex: animes.length > 0 ? 0 : 1,
           }}
           data={animes}
           ItemSeparatorComponent={() => <View style={{ width: 18 }} />}
@@ -77,6 +83,14 @@ export function Header() {
                 })
               }
             />
+          )}
+          ListEmptyComponent={() => (
+            <View style={styles.emptyListContainer}>
+              <HeartCrack size={44} color={resources.colors.white} />
+              <Text style={styles.emptyListText}>
+                Nenhum anime recentemente adicionado
+              </Text>
+            </View>
           )}
         />
       )}

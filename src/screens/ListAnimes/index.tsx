@@ -25,11 +25,13 @@ import { resources } from "../../utils/resources";
 type RouteParams = {
   genreId?: number;
   searchTerm?: string;
+  isTop?: boolean;
+  isSeason?: boolean;
 };
 
 export function ListAnime() {
   const { params } = useRoute();
-  const { genreId, searchTerm } = params as RouteParams;
+  const { genreId, searchTerm, isTop, isSeason } = params as RouteParams;
   const { top } = useSafeAreaInsets();
   const navigator = useNavigation();
 
@@ -48,27 +50,72 @@ export function ListAnime() {
   }, [currentPage]);
 
   const requestAnimesFromList = useCallback(async () => {
-    setIsLoading(true);
-    let query = "";
+    try {
+      setIsLoading(true);
+      const query = generateUrlWithParams();
 
-    if (genreId) {
-      query += `?genres=${genreId}`;
+      if (isSeason) {
+        const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(
+          `/seasons?page=${currentPage}`
+        );
+        setAnimes(data);
+        return;
+      }
+
+      if (isTop) {
+        const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(
+          `/top/anime?page=${currentPage}`
+        );
+        setAnimes(data);
+        return;
+      }
+
+      const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(
+        `/anime${query}`
+      );
+
+      setAnimes(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
     }
-    if (searchTerm) {
-      query += `${query.startsWith("?") ? "&" : "?"}q=${searchTerm}`;
-    }
-    query += `${query.startsWith("?") ? "&" : "?"}page=${currentPage}`;
-
-    const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(`/anime${query}`);
-
-    setAnimes(data);
-    setIsLoading(false);
   }, []);
 
   const requestNextPage = useCallback(async () => {
-    setIsLoading(true);
-    let query = "";
+    try {
+      setIsLoading(true);
+      const query = generateUrlWithParams();
 
+      if (isSeason) {
+        const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(
+          `/seasons?page=${currentPage}`
+        );
+        setAnimes((prev) => [...prev, ...data]);
+        return;
+      }
+
+      if (isTop) {
+        const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(
+          `/top/anime?page=${currentPage}`
+        );
+        setAnimes((prev) => [...prev, ...data]);
+        return;
+      }
+
+      const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(
+        `/anime${query}`
+      );
+      setAnimes((prev) => [...prev, ...data]);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage]);
+
+  function generateUrlWithParams() {
+    let query = "";
     if (genreId) {
       query += `?genres=${genreId}`;
     }
@@ -77,10 +124,8 @@ export function ListAnime() {
     }
     query += `${query.startsWith("?") ? "&" : "?"}page=${currentPage}`;
 
-    const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(`/anime${query}`);
-    setAnimes((prev) => [...prev, ...data]);
-    setIsLoading(false);
-  }, [currentPage]);
+    return query;
+  }
 
   return (
     <LayoutContainer>
@@ -89,6 +134,7 @@ export function ListAnime() {
           ListHeaderComponent={<HeaderWithConfig hasPadding={false} />}
           ListHeaderComponentStyle={{
             marginBottom: 32,
+            flex: 1,
           }}
           contentContainerStyle={{
             marginTop: top,

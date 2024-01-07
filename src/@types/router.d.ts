@@ -7,10 +7,16 @@ export declare global {
       listAnimes: {
         genreId?: number
         searchTerm?: string
+        isTop?: boolean
+        isSeason?: boolean
       }
       viewDetails: {
         animeId: number
       }
+      home: unknown
+      reviews: unknown
+      configs: unknown,
+      editProfile: unknown
     }
   }
 } 

@@ -20,7 +20,9 @@ export function Avatar(props: Props) {
           <UserRound size={38} color={resources.colors.violet500} />
         </View>
       )}
-      {username && !url && <Text>{username.slice(0, 2).toUpperCase()}</Text>}
+      {username && !url && (
+        <Text style={styles.text}>{username.slice(0, 2).toUpperCase()}</Text>
+      )}
     </View>
   );
 }

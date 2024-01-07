@@ -21,11 +21,31 @@ export function ControlSection() {
           text="Generos"
           onPress={() => navigator.navigate("genres")}
         />
-        <ControlCard icon={Presentation} text="Sesson" />
+        <ControlCard
+          icon={Presentation}
+          text="Sesson"
+          onPress={() =>
+            navigator.navigate("listAnimes", {
+              isSeason: true,
+            })
+          }
+        />
       </View>
       <View style={styles.row}>
-        <ControlCard icon={Star} text="Top animes" />
-        <ControlCard icon={MessageCircleCode} text="Reviews" />
+        <ControlCard
+          icon={Star}
+          text="Top animes"
+          onPress={() =>
+            navigator.navigate("listAnimes", {
+              isTop: true,
+            })
+          }
+        />
+        <ControlCard
+          icon={MessageCircleCode}
+          text="Reviews"
+          onPress={() => navigator.navigate("reviews")}
+        />
       </View>
     </View>
   );

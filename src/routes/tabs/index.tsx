@@ -7,6 +7,9 @@ import { HomeIcon, Popcorn } from "lucide-react-native";
 import { Genres } from "../../screens/Genres";
 import { ListAnime } from "../../screens/ListAnimes";
 import { ViewAnimeDetails } from "../../screens/ViewAnimeDetails";
+import { Reviews } from "../../screens/Reviews";
+import { Configs } from "../../screens/Configs";
+import { EditProfile } from "../../screens/EditProfile";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -32,14 +35,14 @@ export function BottomTabsNavigation() {
       detachInactiveScreens
     >
       <Screen
-        name="Home"
+        name="home"
         component={Home}
         options={{
           tabBarIcon: () => (
             <TabBarIndicator
               icon={<HomeIcon color={resources.colors.white} size={22} />}
               title="Home"
-              route="tabs"
+              route="home"
             />
           ),
         }}
@@ -70,6 +73,36 @@ export function BottomTabsNavigation() {
       <Screen
         name="viewDetails"
         component={ViewAnimeDetails}
+        options={{
+          tabBarItemStyle: {
+            display: "none",
+          },
+          unmountOnBlur: true,
+        }}
+      />
+      <Screen
+        name="reviews"
+        component={Reviews}
+        options={{
+          tabBarItemStyle: {
+            display: "none",
+          },
+          unmountOnBlur: true,
+        }}
+      />
+      <Screen
+        name="configs"
+        component={Configs}
+        options={{
+          tabBarItemStyle: {
+            display: "none",
+          },
+          unmountOnBlur: true,
+        }}
+      />
+      <Screen
+        name="editProfile"
+        component={EditProfile}
         options={{
           tabBarItemStyle: {
             display: "none",

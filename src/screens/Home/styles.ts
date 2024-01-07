@@ -19,6 +19,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  headerTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12
+  },
   headerTitle: {
     fontSize: 18,
     color: resources.colors.white,
