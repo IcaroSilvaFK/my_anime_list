@@ -10,6 +10,9 @@ import { ViewAnimeDetails } from "../../screens/ViewAnimeDetails";
 import { Reviews } from "../../screens/Reviews";
 import { Configs } from "../../screens/Configs";
 import { EditProfile } from "../../screens/EditProfile";
+import { EditFavorites } from "../../screens/EditFavorites";
+import { EditGenres } from "../../screens/EditGenres";
+import { RegisterBug } from "../../screens/RegisterBug";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -67,7 +70,7 @@ export function BottomTabsNavigation() {
               route="listAnimes"
             />
           ),
-          // unmountOnBlur: true,
+          unmountOnBlur: true,
         }}
       />
       <Screen
@@ -103,6 +106,36 @@ export function BottomTabsNavigation() {
       <Screen
         name="editProfile"
         component={EditProfile}
+        options={{
+          tabBarItemStyle: {
+            display: "none",
+          },
+          unmountOnBlur: true,
+        }}
+      />
+      <Screen
+        name="editFavorite"
+        component={EditFavorites}
+        options={{
+          tabBarItemStyle: {
+            display: "none",
+          },
+          unmountOnBlur: true,
+        }}
+      />
+      <Screen
+        name="editGenres"
+        component={EditGenres}
+        options={{
+          tabBarItemStyle: {
+            display: "none",
+          },
+          unmountOnBlur: true,
+        }}
+      />
+      <Screen
+        name="registerBug"
+        component={RegisterBug}
         options={{
           tabBarItemStyle: {
             display: "none",

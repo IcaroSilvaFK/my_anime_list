@@ -1,15 +1,19 @@
 import { Text, View } from "react-native";
+
 import { Avatar } from "../../atoms";
 
 import { styles } from "./styles";
+import { useUserStore } from "../../../store/userDetails.store";
 
 export function AvatarWithUserName() {
+  const { user } = useUserStore((state) => state);
+
   return (
     <View style={styles.container}>
-      <Avatar url="https://cdn.nekosapi.com/images/original/7d0a2260-9a84-4bfb-bb11-f26ed2722dc7.webp" />
+      {user && <Avatar url={user.avatar} username={user?.username} />}
       <View style={styles.usernameDetails}>
         <Text style={styles.welcome}>Bem vindo</Text>
-        <Text style={styles.username}>Icaro Vieira</Text>
+        <Text style={styles.username}>{user?.username}</Text>
       </View>
     </View>
   );

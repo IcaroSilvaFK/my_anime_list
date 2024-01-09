@@ -10,11 +10,13 @@ type Props = {
 export function ProgressBar(props: Props) {
   const { progress } = props;
 
+  const convertToPx = (progress / 100) * 1000;
+
   return (
     <View style={styles.container}>
       <View
         style={{
-          width: progress,
+          width: convertToPx,
           backgroundColor: resources.colors.violet500,
           flex: 1,
         }}

@@ -1,62 +1,90 @@
-import { Image, Text, View } from "react-native";
+import { View } from "react-native";
+import { GalleryVerticalEnd, SaveAll } from "lucide-react-native";
+import * as ImagePicker from "expo-image-picker";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { LayoutContainer } from "../../shared";
 import { HeaderWithGoBack } from "../../components/organsms";
 import * as InputRoot from "../../components/atoms/Input";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import { createAvatar } from "@dicebear/core";
-
-import * as Collection from "@dicebear/collection";
 
 import { styles } from "./styles";
 import { useUserStore } from "../../store/userDetails.store";
-import { Button } from "../../components/atoms";
-import { useCallback, useState } from "react";
+import { Avatar, Button } from "../../components/atoms";
+import { useState } from "react";
+import { Toast } from "toastify-react-native";
+import { resources } from "../../utils/resources";
 
 export function EditProfile() {
   const { top } = useSafeAreaInsets();
-  const { user } = useUserStore((state) => state);
+  const { user, setUser } = useUserStore((state) => state);
 
-  const [avatar, setAvatar] = useState(user?.avatar);
+  const [avatar, setAvatar] = useState(user?.avatar || "");
+  const [username, setUsername] = useState(user?.username || "");
 
-  const onRequestGenerateRandomAvatar = useCallback(async () => {
-    const types = Object.entries(Collection).map(([key, value]) => key);
-
-    const type = types[Math.floor(Math.random() * types.length)];
-
-    // const createAvatar =
-
-    //@ts-expect-error
-    const svg = createAvatar(Collection[type as keyof typeof Collection], {
-      seed: user?.username || "icaro-vieira",
+  async function changeAvatar() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
-    const str = await svg.toFile("avatar");
-    console.log(str);
-    // const url = await png.toDataUri();
-    // setAvatar(str);
-  }, []);
-  // console.log(avatar);
+
+    if (result.canceled) {
+      Toast.error("Nenhuma imagem selecionada.", "top");
+      return;
+    }
+
+    const { uri } = result.assets[0];
+
+    setAvatar(uri);
+  }
+
+  function onRequestSave() {
+    if (!username || !username.trim()) {
+      Toast.error("Por favor, informe o seu nome.", "top");
+      return;
+    }
+
+    if (!avatar) {
+      Toast.error("Por favor, selecione uma imagem.", "top");
+      return;
+    }
+
+    setUser({
+      avatar,
+      username,
+    });
+    Toast.success("Alterações salvas com sucesso!", "top");
+  }
+
   return (
     <LayoutContainer>
       <View style={[styles.container, { marginTop: top }]}>
         <HeaderWithGoBack title="Editar Perfil" />
         <View style={styles.avatarContainer}>
-          <Image
-            source={{
-              uri: "https://cdn.myanimelist.net/images/anime/1263/124155.webp",
-            }}
-            style={styles.avatar}
-          />
+          <Avatar username={username} url={avatar} width={120} height={120} />
 
           <Button
-            title="Gerar avatar aleatório"
-            onPress={onRequestGenerateRandomAvatar}
+            leftIcon={GalleryVerticalEnd}
+            title="Carregar imagem da galeria"
+            onPress={changeAvatar}
           />
         </View>
-        <View>
+        <View style={styles.form}>
           <InputRoot.Container>
-            <InputRoot.Input placeholder="Digite aqui o nome" />
+            <InputRoot.Input
+              placeholder="Digite aqui o nome"
+              value={username}
+              onChangeText={setUsername}
+            />
           </InputRoot.Container>
+
+          <Button
+            leftIcon={SaveAll}
+            title="Salvar alterações"
+            onPress={onRequestSave}
+            bg={resources.colors.green500}
+          />
         </View>
       </View>
     </LayoutContainer>

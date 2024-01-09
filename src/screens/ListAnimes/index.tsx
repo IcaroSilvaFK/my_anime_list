@@ -1,10 +1,4 @@
-import {
-  ActivityIndicator,
-  Dimensions,
-  FlatList,
-  ScrollView,
-  View,
-} from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, View } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import {
   useFocusEffect,
@@ -53,26 +47,41 @@ export function ListAnime() {
     try {
       setIsLoading(true);
       const query = generateUrlWithParams();
+      const baseParams = {
+        order_by: "start_date",
+        sort: "desc",
+        page: currentPage,
+      };
 
       if (isSeason) {
-        const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(
-          `/seasons?page=${currentPage}`
-        );
+        const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(`/seasons`, {
+          params: {
+            ...baseParams,
+          },
+        });
         setAnimes(data);
         return;
       }
 
       if (isTop) {
         const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(
-          `/top/anime?page=${currentPage}`
+          `/top/anime`,
+          {
+            params: {
+              ...baseParams,
+            },
+          }
         );
         setAnimes(data);
         return;
       }
 
-      const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(
-        `/anime${query}`
-      );
+      const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(`/anime`, {
+        params: {
+          ...query,
+          ...baseParams,
+        },
+      });
 
       setAnimes(data);
     } catch (err) {
@@ -103,9 +112,9 @@ export function ListAnime() {
         return;
       }
 
-      const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(
-        `/anime${query}`
-      );
+      const { data } = await jikanApi.get<{ data: AnimeDTO[] }>(`/anime`, {
+        params: query,
+      });
       setAnimes((prev) => [...prev, ...data]);
     } catch (err) {
       console.log(err);
@@ -115,14 +124,16 @@ export function ListAnime() {
   }, [currentPage]);
 
   function generateUrlWithParams() {
-    let query = "";
+    const query: {
+      genres?: number;
+      q?: string;
+    } = {};
     if (genreId) {
-      query += `?genres=${genreId}`;
+      query["genres"] = genreId;
     }
     if (searchTerm) {
-      query += `${query.startsWith("?") ? "&" : "?"}q=${searchTerm}`;
+      query["q"] = searchTerm;
     }
-    query += `${query.startsWith("?") ? "&" : "?"}page=${currentPage}`;
 
     return query;
   }

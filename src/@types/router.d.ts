@@ -17,6 +17,9 @@ export declare global {
       reviews: unknown
       configs: unknown,
       editProfile: unknown
+      editFavorite: unknown
+      editGenres: unknown
+      registerBug: unknown
     }
   }
 } 

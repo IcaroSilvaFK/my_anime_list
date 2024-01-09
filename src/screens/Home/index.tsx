@@ -84,7 +84,7 @@ export function Home() {
               <FlatList
                 data={recommendedAnimes}
                 contentContainerStyle={{
-                  flex: 1,
+                  flex: recommendedAnimes.length > 0 ? 0 : 1,
                 }}
                 ItemSeparatorComponent={() => <View style={{ width: 28 }} />}
                 ListEmptyComponent={() => (

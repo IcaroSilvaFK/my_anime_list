@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, CreateAxiosDefaults } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, CreateAxiosDefaults } from 'axios';
 
 export class HttpService {
   private client: AxiosInstance
@@ -15,9 +15,9 @@ export class HttpService {
   }
 
 
-  async get<T>(uri: string): Promise<T> {
+  async get<T>(uri: string, config?: AxiosRequestConfig): Promise<T> {
 
-    const { data } = await this.client.get<T>(uri)
+    const { data } = await this.client.get<T>(uri, config)
 
     return data
   }

@@ -13,6 +13,10 @@ const iconProps = {
   color: resources.colors.white,
 };
 
+export enum ACTION_CONFIGS {
+  DELETE_ACCOUNT = "DELETE_ACCOUNT",
+}
+
 export const configs = [
   {
     title: "Perfil",
@@ -24,20 +28,24 @@ export const configs = [
     title: "Editar Favoritos",
     icon: <BookHeart {...iconProps} />,
     color: transparentize(0.9, resources.colors.violet500),
+    route: "editFavorite",
   },
   {
     title: "Generos Favoritos",
     icon: <LayoutDashboard {...iconProps} />,
     color: transparentize(0.9, resources.colors.violet500),
+    route: "editGenres",
   },
   {
     title: "Registrar Bug",
     icon: <Bug {...iconProps} />,
     color: darken(0.2, resources.colors.yellow),
+    route: "registerBug",
   },
   {
     title: "Deletar Conta",
     icon: <Trash2 {...iconProps} />,
     color: darken(0.1, resources.colors.red),
+    action: ACTION_CONFIGS.DELETE_ACCOUNT,
   },
 ];
