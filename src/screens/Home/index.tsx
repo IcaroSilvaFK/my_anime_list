@@ -1,5 +1,6 @@
 import {
   FlatList,
+  Keyboard,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -17,7 +18,7 @@ import { resources } from "../../utils/resources";
 import { CardAnime, EmptyListComponent } from "../../components/atoms";
 import { HeaderWithConfig } from "../../components/organsms";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePreferredGenresStore } from "../../store/preferredGenres.store";
 import { jikanApi } from "../../services/http.service";
 import { AnimeDTO } from "../../dtos/anime.dto";
@@ -30,15 +31,28 @@ export function Home() {
   const navigator = useNavigation();
 
   const { genresId } = usePreferredGenresStore((state) => state);
-  const [recommendedAnimes, setRecommendedAnimes] = useState<AnimeDTO[]>([]);
-
   const { favoritesAnime } = useFavoriteAnimes((state) => state);
+
+  const [recommendedAnimes, setRecommendedAnimes] = useState<AnimeDTO[]>([]);
+  const [searchValue, setSearchValue] = useState("");
 
   useFocusEffect(
     useCallback(() => {
       requestRecommendationsAnimes();
     }, [])
   );
+
+  useEffect(() => {
+    const listenerKeyboard = Keyboard.addListener("keyboardDidShow", (e) => {
+      navigator.navigate("listAnimes", {
+        searchTerm: searchValue,
+      });
+    });
+
+    return () => {
+      listenerKeyboard.remove();
+    };
+  }, []);
 
   const requestRecommendationsAnimes = useCallback(async () => {
     try {
@@ -66,7 +80,11 @@ export function Home() {
           <View style={styles.form}>
             <InputRoot.Container>
               <InputRoot.Icon icon={Search} />
-              <InputRoot.Input placeholder="Pesquisar" />
+              <InputRoot.Input
+                placeholder="Pesquisar"
+                onChangeText={setSearchValue}
+                value={searchValue}
+              />
             </InputRoot.Container>
           </View>
           <View style={styles.animesSecionContainer}>

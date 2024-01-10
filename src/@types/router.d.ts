@@ -9,6 +9,7 @@ export declare global {
         searchTerm?: string
         isTop?: boolean
         isSeason?: boolean
+        q?: string
       }
       viewDetails: {
         animeId: number

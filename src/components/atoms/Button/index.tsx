@@ -1,5 +1,5 @@
 import { TouchableOpacityProps, TouchableOpacity, Text } from "react-native";
-import { darken } from "polished";
+import { transparentize } from "polished";
 
 import { styles } from "./styles";
 import { resources } from "../../../utils/resources";
@@ -31,7 +31,7 @@ export function Button(props: Props) {
       style={[
         styles.container,
         {
-          backgroundColor: rest.disabled ? darken(0.1, bg) : bg,
+          backgroundColor: rest.disabled ? transparentize(0.7, bg) : bg,
         },
       ]}
       {...rest}

@@ -21,11 +21,12 @@ type RouteParams = {
   searchTerm?: string;
   isTop?: boolean;
   isSeason?: boolean;
+  q?: string;
 };
 
 export function ListAnime() {
   const { params } = useRoute();
-  const { genreId, searchTerm, isTop, isSeason } = params as RouteParams;
+  const { genreId, searchTerm, isTop, isSeason, q } = params as RouteParams;
   const { top } = useSafeAreaInsets();
   const navigator = useNavigation();
 
@@ -137,7 +138,6 @@ export function ListAnime() {
 
     return query;
   }
-
   return (
     <LayoutContainer>
       <View style={styles.container}>

@@ -1,17 +1,6 @@
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { ArrowLeftCircle, PlusCircle, Trash2 } from "lucide-react-native";
-import {
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
+import { FlatList, Image, ScrollView, Text, View } from "react-native";
+import { PlusCircle, Trash2 } from "lucide-react-native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { resources } from "../../utils/resources";
@@ -37,7 +26,6 @@ import { HeaderWithGoBack } from "../../components/organsms";
 
 export function ViewAnimeDetails() {
   const { top } = useSafeAreaInsets();
-  const navigator = useNavigation();
   const { params } = useRoute();
 
   const [animeDetails, setAnimeDetails] = useState<AnimeDTO>({} as AnimeDTO);
